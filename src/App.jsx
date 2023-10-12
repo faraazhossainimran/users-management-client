@@ -11,13 +11,27 @@ function App() {
       .then((data) => setUsers(data));
   }, []);
 
-  const handleAddUser = () => {
-    event.preventDefault();
+  const handleAddUser = (e) => {
+    e.preventDefault();
     const form = event.target;
     const name = form.name.value;
     const email = form.email.value;
     const user = {name, email}
     console.log(user); 
+    fetch('http://localhost:5000/users', {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('indie post',data);
+      const newUsers = [...users, data]
+      setUsers(newUsers)
+      form.reset()
+    })
   }
   return (
     <>
